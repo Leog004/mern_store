@@ -2,7 +2,6 @@ const router = require("express").Router();
 const {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} = require('./verifyToken')
 const CryptoJS = require('crypto-js');
 const User = require("../models/User");
-const { response } = require("express");
 
 // GET ALL USERS
 router.get('/', verifyTokenAndAdmin, async (req, res) => {
@@ -12,7 +11,7 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
     try {
         const user = query 
         ? await User.find().sort({_id: 1}).limit(5)
-        : User.find();
+        : await User.find();
 
         res.status(200).json(user);
     }
@@ -55,7 +54,7 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
 
         ]);
 
-        response.status(200).json(data);
+        res.status(200).json(data);
 
     }
 
