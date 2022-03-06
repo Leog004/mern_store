@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -50,13 +51,15 @@ const LinearGradient = styled.div`
 export default function CategoryItem({item}) {
   return (
     <Container>
-        <LinearGradient>
-            <Image src={item.img}/>
-        </LinearGradient>
-        <Info>
-            <Title>{item.title}</Title>
-            <Button>SHOP NOW</Button>
-        </Info>
+        <Link to={`/products/${item.cat}`}>
+            <LinearGradient>
+                <Image src={item.img}/>
+            </LinearGradient>
+            <Info>
+                <Title>{item.title}</Title>
+                <Button>SHOP NOW</Button>
+            </Info>
+        </Link>
     </Container>
   )
 }

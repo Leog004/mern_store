@@ -1,18 +1,16 @@
-const express = require("express")
+const express = require("express");
 const app = express();
-
-app.use(express.json());
-
-require('dotenv').config()
-const cors = require("cors");
 const mongoose = require("mongoose");
-const userRoute = require('./routes/user');
-const cartRoute = require('./routes/cart');
-const orderRoute = require('./routes/order');
-const productRoute = require('./routes/product');
+const dotenv = require("dotenv");
+const userRoute = require("./routes/user");
+const authRoute = require("./routes/auth");
+const productRoute = require("./routes/product");
+const cartRoute = require("./routes/cart");
+const orderRoute = require("./routes/order");
 const stripeRoute = require("./routes/stripe");
-const authRoute = require('./routes/auth');
+const cors = require("cors");
 
+dotenv.config();
 
 
 var uri = process.env.MONGOOSE_URI.replace('<password>', process.env.MONGOOSE_PASSWORD);
@@ -26,6 +24,8 @@ mongoose.connect(uri, {
 .catch((err) => console.log(err));
 
 
+app.use(cors());
+app.use(express.json());
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/products', productRoute);

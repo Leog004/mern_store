@@ -1,11 +1,33 @@
-import {Home} from './Pages'
-import Cart from './Pages/Cart';
-import Login from './Pages/Login';
-import Product from './Pages/Product';
-import Register from './Pages/Register';
+import {Home, ProductList, Product, Login, Register, Cart} from './Pages'
+import ScrollToTop from './Components/ScrollToTop';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom'
 
 const App = () => {
-  return <Cart/>
+
+  const user = true;
+
+  return (
+    <Router>
+      <ScrollToTop>
+        <Routes>
+          <Route exact path='/' element={<Home/>} />
+          <Route path='/products/:category' element={<ProductList/>} />
+          <Route path='/product/:id' element={<Product/>} />
+          <Route path='/cart' element={<Cart/>} />
+      
+          
+          <Route path="/login" element={ user ? <Navigate to="/" /> : <Login/>} />
+          <Route path='/register' element={ user ? <Navigate to="/" /> : <Register/> }/>
+
+        </Routes>
+      </ScrollToTop>
+    </Router>
+  )
 };
 
 export default App;
