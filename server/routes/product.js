@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
 
 
 // GET PRODUCT BY ID
-router.get('/:id', async (req, res) => {
+router.get('/find/:id', async (req, res) => {
 
     try {
         const product = await Product.findById(req.params.id);

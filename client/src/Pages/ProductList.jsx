@@ -43,7 +43,7 @@ export default function ProductList() {
   const [sort, setSort] = useState("newest");
 
   const handleFilters = (e) => {
-    const value = e.target.value;
+    const value = e.target.value.toString().toLowerCase();
 
     setFilters({
       ...filters,
@@ -56,7 +56,7 @@ export default function ProductList() {
     <Container>
       <Navbar />
       <Announcements />
-      <Title>Dresses</Title>
+      <Title>{category}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>Filter Products:</FilterText>

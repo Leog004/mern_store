@@ -1,8 +1,12 @@
 import { Remove, Add } from '@material-ui/icons'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Footer, Navbar, Newsletter, Announcements } from '../Components'
 import { mobile } from "../responsive";
+import { useLocation } from 'react-router-dom';
+import { publicRequest } from '../requestMethod';
+import { addProduct } from '../redux/cartRedux';
+import { useDispatch } from 'react-redux';
 
 const Container = styled.div``
 
@@ -114,6 +118,38 @@ const Button = styled.button`
 
 
 export default function Product() {
+
+  const location = useLocation();
+
+  const productID = location.pathname.split('/')[2];
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const [product, setProduct] = useState({});
+  const dispatch = useDispatch();
+
+  const handleQuantity = (type) => {
+    if(type === 'dec'){
+      quantity > 1 && setQuantity(quantity - 1);
+    }else{
+      setQuantity(quantity + 1);
+    }
+  }
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await publicRequest.get("/products/find/" + productID);
+        setProduct(res.data);
+      }catch (err) {return console.log(err)}
+    }
+    getProduct();
+  }, [productID])
+
+  const handleClick = () => {
+    dispatch(addProduct({...product, quantity, color, size}));
+  }
+
   return (
     <Container>
         <Navbar/>
@@ -121,36 +157,29 @@ export default function Product() {
 
         <Wrapper>
             <ImgContainer>
-                <Image src="https://www.prada.com/content/dam/pradanux_products/U/UCS/UCS319/1YOTF010O/UCS319_1YOT_F010O_S_182_SLF.png" />
+                <Image src={product.img} />
             </ImgContainer>
             <InfoContainer>
-                <Title>Denin Jumpsuit</Title>
-                <Desc>Lorem ipsum is placeholder text commonly used in the graphic, 
-                    print, and publishing industries for previewing layouts and visual mockups.
-                    Lorem ipsum is placeholder text commonly used in the graphic, 
-                    print, and publishing industries for previewing layouts and visual mockups.
-                    Lorem ipsum is placeholder text commonly used in the graphic, 
-                    print, and publishing industries for previewing layouts and visual mockups.    
+                <Title>{product.title}</Title>
+                <Desc>{product.description}  
                 </Desc>
-                <Price>$ 20</Price>
+                <Price>$ {product.price}</Price>
 
 
                 <FilterContainer>
-                    <Filter>
-                        <FilterTitle>Color</FilterTitle>
-                        <FilterColor color="black" />
-                        <FilterColor color="darkblue"  />
-                        <FilterColor color="gray"  />
-                    </Filter>
+                <Filter>
+                  <FilterTitle>Color</FilterTitle>
+                  {product.color?.map((c) => (
+                    <FilterColor color={c} key={c} onClick={() => setColor(c)} />
+                  ))}
+                </Filter>
 
                     <Filter>
                         <FilterTitle>Size</FilterTitle>
-                        <FilterSize>
-                            <FilterSizeOption>XS</FilterSizeOption>
-                            <FilterSizeOption>S</FilterSizeOption>
-                            <FilterSizeOption>M</FilterSizeOption>
-                            <FilterSizeOption>L</FilterSizeOption>
-                            <FilterSizeOption>XL</FilterSizeOption>
+                        <FilterSize onChange={(e) => setSize(e.target.value)}>
+                          {product.size?.map((s) => (
+                            <FilterSizeOption key={s}>{s}</FilterSizeOption>
+                          ))}
                         </FilterSize>
                     </Filter>
 
@@ -159,11 +188,11 @@ export default function Product() {
 
                 <AddContainer>
                     <AmountContainer>
-                        <Remove/>
-                        <Amount>1</Amount>
-                        <Add/>
+                        <Remove onClick={() => handleQuantity("dec")} />
+                        <Amount>{quantity}</Amount>
+                        <Add onClick={() => handleQuantity("inc")} />
                     </AmountContainer>
-                    <Button>ADD TO CART</Button>
+                    <Button onClick={handleClick}>ADD TO CART</Button>
                 </AddContainer>
             </InfoContainer>
 
