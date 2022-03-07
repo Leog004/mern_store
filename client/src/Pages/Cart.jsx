@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout'
 import {UserRequest} from './../requestMethod'
-import { clearProducts } from '../redux/cartRedux';
+import { clearProducts, decriment, increment } from '../redux/cartRedux';
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -227,9 +227,9 @@ export default function Cart() {
                     <PriceDetail>
                       <ProductAmountContainer>
                        
-                        <Remove />
+                        <Remove onClick={() => dispatch(decriment(el))} />
                           <ProductAmount>{el.quantity}</ProductAmount>
-                        <Add />
+                        <Add onClick={() => dispatch(increment(el))} />
 
                       </ProductAmountContainer>
                       <ProductPrice>$ {el.price * el.quantity}</ProductPrice>
