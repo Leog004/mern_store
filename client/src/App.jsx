@@ -6,6 +6,7 @@ import {
   Route,
   Navigate
 } from 'react-router-dom'
+import Success from './Pages/Success';
 
 const App = () => {
 
@@ -23,6 +24,9 @@ const App = () => {
           
           <Route path="/login" element={ user ? <Navigate to="/" /> : <Login/>} />
           <Route path='/register' element={ user ? <Navigate to="/" /> : <Register/> }/>
+
+
+          <Route path='/success' element={<Success/>} />
 
         </Routes>
       </ScrollToTop>

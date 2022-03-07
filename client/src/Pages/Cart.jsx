@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 import { Announcements, Footer, Navbar} from '../Components'
 import { Add, Remove } from "@material-ui/icons";
@@ -6,6 +7,7 @@ import { mobile } from "../responsive";
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout'
+import {UserRequest} from './../requestMethod'
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -159,6 +161,29 @@ const Button = styled.button`
 export default function Cart() {
 
   const cart = useSelector(state => state.cart);
+  const [stripeToken, setStripeToken] = useState(null);
+
+  const navigate = useNavigate()
+  
+
+  const onToken = (token) => {
+    setStripeToken(token)
+  }
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await UserRequest.post("/checkout/payment", {
+          tokenId: stripeToken.id,
+          amount: 500,
+        });
+        navigate("/success", {
+          stripeData: res.data,
+          products: cart, });
+      } catch {}
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, cart, navigate]);
 
   return (
     <Container>
@@ -229,7 +254,18 @@ export default function Cart() {
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <StripeCheckout
+              name='Unravel Shop'
+              image=""
+              billingAddress
+              shippingAddress
+              description={`Your total is ${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+            >
+              <Button>CHECKOUT NOW</Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>
