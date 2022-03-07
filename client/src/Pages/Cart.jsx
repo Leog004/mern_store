@@ -4,10 +4,11 @@ import styled from 'styled-components'
 import { Announcements, Footer, Navbar} from '../Components'
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout'
 import {UserRequest} from './../requestMethod'
+import { clearProducts } from '../redux/cartRedux';
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -164,6 +165,7 @@ export default function Cart() {
   const [stripeToken, setStripeToken] = useState(null);
 
   const navigate = useNavigate()
+  const dispatch = useDispatch();
   
 
   const onToken = (token) => {
@@ -192,7 +194,8 @@ export default function Cart() {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton onClick={() => dispatch(clearProducts())}>Clear Cart</TopButton>
+          <TopButton onClick={() => navigate('/products/')}>CONTINUE SHOPPING</TopButton>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>

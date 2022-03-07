@@ -4,6 +4,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/UserRedux';
 
 const Container = styled.div`
     height: 60px;
@@ -64,6 +66,7 @@ export default function Navbar() {
 
     const quantity = useSelector(state => state.cart.quantity);
     const userLogined = useSelector(state => state.user.currentUser)
+    const dispatch = useDispatch();
 
     console.log(quantity);
 
@@ -87,7 +90,7 @@ export default function Navbar() {
                 {
                     userLogined
                     ?
-                        <MenuItem>
+                        <MenuItem onClick={() => dispatch(logout())}>
                             Logout
                         </MenuItem>
 
