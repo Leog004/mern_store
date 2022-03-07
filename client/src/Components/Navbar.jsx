@@ -63,6 +63,7 @@ const MenuItem = styled.div`
 export default function Navbar() {
 
     const quantity = useSelector(state => state.cart.quantity);
+    const userLogined = useSelector(state => state.user.currentUser)
 
     console.log(quantity);
 
@@ -82,10 +83,30 @@ export default function Navbar() {
                 </Link>
             </Center>
             <Right>
-                <MenuItem>Register</MenuItem>
-                <MenuItem>Sign In</MenuItem>
 
-                <Link to="/cart">
+                {
+                    userLogined
+                    ?
+                        <MenuItem>
+                            Logout
+                        </MenuItem>
+
+                    : (
+                        <>
+                            <Link to="/register" style={{color: 'black', textDecoration: "none"}}>
+                                <MenuItem>Register</MenuItem>
+                            </Link>
+
+                            <Link to="/login" style={{color: 'black', textDecoration: "none"}}>
+                                <MenuItem>Sign In</MenuItem>
+                            </Link>                  
+                        </>
+                    )
+                }
+
+
+
+                <Link style={{color: 'black', textDecoration: "none"}} to="/cart">
                     <MenuItem>
                         <Badge badgeContent={quantity} color="primary">
                             <ShoppingCartOutlined/>
