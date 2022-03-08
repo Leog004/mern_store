@@ -68,8 +68,6 @@ export default function Navbar() {
     const userLogined = useSelector(state => state.user.currentUser)
     const dispatch = useDispatch();
 
-    console.log(quantity);
-
   return (
     <Container>
         <Wrapper>
