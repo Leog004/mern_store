@@ -15,6 +15,8 @@ export default function Success() {
 
   const currentUser = useSelector((state) => state.user.currentUser);
 
+  const isGuestCheckout = currentUser ? false : true;
+
   console.log(data, cart);
   
   const [orderId, setOrderId] = useState(null);
@@ -23,7 +25,7 @@ export default function Success() {
     const createOrder = async () => {
       try {
         const res = await UserRequest.post("/orders", {
-          userId: currentUser._id,
+          userId: !isGuestCheckout ? currentUser._id : "GuestCheckout",
           products: cart.products.map((item) => ({
             productId: item._id,
             quantity: item._quantity,
@@ -38,7 +40,7 @@ export default function Success() {
       }
     };
     data && createOrder();
-  }, [cart, data, currentUser]);
+  }, [cart, data, currentUser, dispatch]);
 
   return (
     <div
