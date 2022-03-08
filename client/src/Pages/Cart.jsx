@@ -179,9 +179,7 @@ export default function Cart() {
           tokenId: stripeToken.id,
           amount: 500,
         });
-        navigate("/success", {
-          stripeData: res.data,
-          products: cart, });
+        navigate("/success", {state: { stripeData: res.data, products: cart } });
       } catch {}
     };
     stripeToken && makeRequest();
