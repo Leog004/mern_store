@@ -258,6 +258,7 @@ export default function Cart() {
             <StripeCheckout
               name='Unravel Shop'
               image=""
+              email
               billingAddress
               shippingAddress
               description={`Your total is ${cart.total}`}

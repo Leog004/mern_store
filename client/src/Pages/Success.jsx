@@ -26,6 +26,8 @@ export default function Success() {
       try {
         const res = await UserRequest.post("/orders", {
           userId: !isGuestCheckout ? currentUser._id : "GuestCheckout",
+          orderId: data.id,
+          orderEmail: data.billing_details.email,
           products: cart.products.map((item) => ({
             productId: item._id,
             quantity: item._quantity,
@@ -40,7 +42,7 @@ export default function Success() {
       }
     };
     data && createOrder();
-  }, [cart, data, currentUser, dispatch]);
+  }, [cart, data, currentUser, dispatch, isGuestCheckout]);
 
   return (
     <div
